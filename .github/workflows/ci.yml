@@ -1,6 +1,6 @@
 name: "Application Pipeline"
 
-onn: push
+on: push
 
 jobs:
   validate-code:
