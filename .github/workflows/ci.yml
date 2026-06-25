@@ -33,7 +33,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('skeleton-ci-cd/skeleton/package-lock.json') }}
+
 
       - name: "Execution de la suite de tests"
         run: npm test
