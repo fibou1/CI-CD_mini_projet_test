@@ -14,7 +14,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  validate-code:
+  build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -44,3 +44,11 @@ jobs:
         run: |
           echo "L'environnement actuel est : $CURRENT_ENV"
           echo "Tentative d'affichage de la cle secrete : $SECRET_KEY"
+  deploy-staging-prod:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production        # déclenche l'approbation humaine
+    steps:
+      - name: Simulate deploy
+        run: echo "Deploiement en production simule avec succes"
