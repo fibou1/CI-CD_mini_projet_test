@@ -6,11 +6,41 @@ jobs:
   validate-code:
     runs-on: ubuntu-latest
     steps:
+
+      # TP1 — Etape 1 : Cloner le code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
+      # TP2 — Etape 2 : Cache npm
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
 
+      # TP1+TP2 — Etape 3 : Installer les dependances (avec group)
+      - name: Install dependencies
+        run: |
+          echo "::group::Installation des modules Node.js"
+          npm ci
+          echo "::endgroup::"
+
+      # TP1 — Etape 4 : Lancer les tests
       - name: Run tests
         run: npm test
+
+      # TP2 — Etape 5 : Publier le rapport JUnit
+      - name: Publish test report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: 'junit-results.xml'
+
+      # TP2 — Etape 6 : Verifier les secrets et variables
+      - name: Check environment
+        env:
+          APP_ENV: ${{ vars.APP_ENVIRONMENT }}
+          AWS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: |
+          echo "Environnement : $APP_ENV"
+          echo "Cle AWS : $AWS_KEY"
