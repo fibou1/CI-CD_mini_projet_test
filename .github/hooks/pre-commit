@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Verification locale des workflows Actions"
+# Execution d'actionlint sur l'ensemble des fichiers de configuration
+actionlint .github/workflows/*.yml
+# Interception du code de retour du linter
+if [ $? -ne 0 ]; then
+echo "::error:: Echec de la validation du workflow. Commit rejete."
+exit 1
+fi
+echo "Syntaxe des workflows valide !"
+exit 0
