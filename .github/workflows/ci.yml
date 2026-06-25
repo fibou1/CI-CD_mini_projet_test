@@ -22,7 +22,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
+    defaults:
+      run:
+        working-directory: skeleton-ci-cd/skeleton
     steps:
       - name: "Clonage du depot"
         uses: actions/checkout@v5
