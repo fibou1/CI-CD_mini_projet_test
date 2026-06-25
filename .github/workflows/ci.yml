@@ -2,10 +2,22 @@ name: "Application Pipeline"
 
 on:
   push:
-
+  workflow_dispatch:
+    inputs:
+      target_sub_env:
+        description: "Sous-environnement cible (ex: sandbox)"
+        required: false
+        default: "sandbox"
+  schedule:
+    - cron: "0 0 * * *"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   validate-code:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
       - name: "Clonage du depot"
         uses: actions/checkout@v5
